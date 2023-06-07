@@ -13,21 +13,10 @@ export function Task3() {
         if (selectedProduct !== "") {
             setProducts([
                 ...products,
-                {
-                    name: selectedProduct,
-                    price: 0,
-                    consumers: [],
-                    consumption: {},
-                },
+                { name: selectedProduct, price: 0, consumers: [] },
             ]);
             setSelectedProduct("");
         }
-    };
-
-    const setConsumption = (productIndex, customerIndex, consumption) => {
-        const updatedProducts = [...products];
-        updatedProducts[productIndex].consumption[customerIndex] = consumption;
-        setProducts(updatedProducts);
     };
 
     const addCustomer = () => {
@@ -50,28 +39,20 @@ export function Task3() {
         const updatedProducts = [...products];
         const consumers = updatedProducts[productIndex].consumers;
 
-        const isConsumer = consumers.includes(customerIndex);
-
-        if (isConsumer) {
-            updatedProducts[productIndex].consumers = consumers.filter(
-                (consumer) => consumer !== customerIndex
-            );
+        if (!consumers.includes(customerIndex)) {
+            consumers.push(customerIndex);
         } else {
-            if (consumers.length < 2) {
-                updatedProducts[productIndex].consumers = [
-                    ...consumers,
-                    customerIndex,
-                ];
-            }
+            consumers.splice(consumers.indexOf(customerIndex), 1);
         }
 
+        updatedProducts[productIndex].consumers = consumers;
         setProducts(updatedProducts);
     };
 
-    const toggleServiceCharge = (index) => {
+    const toggleServiceCharge = (customerIndex) => {
         const updatedCustomers = [...customers];
-        updatedCustomers[index].includeServiceCharge =
-            !updatedCustomers[index].includeServiceCharge;
+        updatedCustomers[customerIndex].includeServiceCharge =
+            !updatedCustomers[customerIndex].includeServiceCharge;
         setCustomers(updatedCustomers);
     };
 
@@ -81,12 +62,10 @@ export function Task3() {
         customers.forEach((customer, customerIndex) => {
             customerAmounts[customer.name] = 0;
             products.forEach((product) => {
-                if (product.consumption[customerIndex]) {
+                if (product.consumers.includes(customerIndex)) {
                     const productAmount = parseFloat(product.price);
-                    const consumptionQuantity =
-                        product.consumption[customerIndex];
                     const amountPerConsumer =
-                        productAmount / consumptionQuantity;
+                        productAmount / product.consumers.length;
                     customerAmounts[customer.name] += amountPerConsumer;
                 }
             });
@@ -107,7 +86,16 @@ export function Task3() {
         <>
             <Header />
             <div className="container-bill">
-                <h2>Calculadora de Divisão de Conta</h2>
+                <div className="text">
+                    <h2>Calculadora de Divisão de Conta</h2>
+                    <p>
+                        Esta tarefa não foi concluída com todos os requisitos
+                        pedidos no PDF. Como se pode notar ao executar o teste
+                        número 2, devido ao prazo de entrega, não fui
+                        bem-sucedida em criar uma função que o para executar
+                        tudo perfeitamente.
+                    </p>
+                </div>
                 <div className="content">
                     <div className="container-products">
                         <label className="product-name">
@@ -125,83 +113,60 @@ export function Task3() {
                             {products.map((product, index) => (
                                 <li key={index}>
                                     <div className="inputs-wrapper">
-                                        <span className="name">
-                                            {" "}
-                                            {product.name}
-                                        </span>
-                                        <div>
-                                            <span className="value">
-                                                Valor do Produto{" "}
+                                        <div className="fjr">
+                                            <span className="name">
+                                                {" "}
+                                                {product.name}
                                             </span>
-                                            R$:{" "}
-                                            <input
-                                                className="number"
-                                                type="number"
-                                                value={product.price}
-                                                onChange={(e) =>
-                                                    setProductPrice(
-                                                        index,
-                                                        e.target.value
-                                                    )
-                                                }
-                                            />
+                                            <div>
+                                                <span className="value">
+                                                    Valor do Produto{" "}
+                                                </span>
+                                                R$:{" "}
+                                                <input
+                                                    className="number"
+                                                    type="number"
+                                                    value={product.price}
+                                                    onChange={(e) =>
+                                                        setProductPrice(
+                                                            index,
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <div className="constumer-check">
-                                        <p>Quem consumiu esse produto?</p>
-                                        <div>
-                                            <div></div>
-                                            {customers.map(
-                                                (customer, customerIndex) => (
-                                                    <div
-                                                        className="wrapper"
-                                                        key={customerIndex}
-                                                    >
-                                                        <div className="divOne">
-                                                            {customer.name}
-                                                            <input
-                                                                type="checkbox"
-                                                                checked={product.consumers.includes(
-                                                                    customerIndex
-                                                                )}
-                                                                onChange={() =>
-                                                                    assignProductToCustomer(
-                                                                        index,
+                                        <div className="constumer-check">
+                                            <p>Quem consumiu esse produto?</p>
+                                            <div>
+                                                {customers.map(
+                                                    (
+                                                        customer,
+                                                        customerIndex
+                                                    ) => (
+                                                        <div
+                                                            className="wrapper"
+                                                            key={customerIndex}
+                                                        >
+                                                            <div className="divOne">
+                                                                {customer.name}
+                                                                <input
+                                                                    type="checkbox"
+                                                                    checked={product.consumers.includes(
                                                                         customerIndex
-                                                                    )
-                                                                }
-                                                            />
+                                                                    )}
+                                                                    onChange={() =>
+                                                                        assignProductToCustomer(
+                                                                            index,
+                                                                            customerIndex
+                                                                        )
+                                                                    }
+                                                                />
+                                                            </div>
                                                         </div>
-                                                        <div className="divTwo">
-                                                            Quantidade:
-                                                            <input
-                                                                type="number"
-                                                                min="0"
-                                                                value={
-                                                                    product
-                                                                        .consumption[
-                                                                        customerIndex
-                                                                    ]
-                                                                        ? product
-                                                                              .consumption[
-                                                                              customerIndex
-                                                                          ]
-                                                                        : ""
-                                                                }
-                                                                onChange={(e) =>
-                                                                    setConsumption(
-                                                                        index,
-                                                                        customerIndex,
-                                                                        e.target
-                                                                            .value
-                                                                    )
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                )
-                                            )}
+                                                    )
+                                                )}
+                                            </div>
                                         </div>
                                     </div>
                                 </li>
