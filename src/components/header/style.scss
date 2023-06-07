@@ -15,8 +15,14 @@ header {
         font-family: "Cormorant Garamond", serif;
     }
     ul {
-        display: none;
+        font-family: "Inter", sans-serif;
+        display: inline-flex;
+        list-style-type: none;
+        li {
+            margin: 0px 2rem;
+        }
     }
+
     .contact-wrapper {
         display: none;
     }
