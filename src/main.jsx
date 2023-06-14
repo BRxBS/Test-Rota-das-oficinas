@@ -7,7 +7,7 @@ import { HomePage } from "./HomePage";
 import { Task1 } from "./task1";
 import { Task2 } from "./task2";
 import { Task3 } from "./task3";
-import { Header } from "./components/header";
+import { Task4 } from "./task4";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +25,10 @@ const router = createBrowserRouter([
     {
         path: "/task3",
         element: <Task3 />,
+    },
+    {
+        path: "/task4",
+        element: <Task4 />,
     },
 ]);
 
